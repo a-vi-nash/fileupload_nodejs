@@ -94,7 +94,7 @@ router.post("/tocsv", fileUpload.single("file"), (req, res) => {
       {
         return res
         .status(200)
-        .sendFile(global.config.uploadFolder+"/"+filename+".csv");
+        .download(global.config.uploadFolder+"/"+filename+".csv",filename+".csv");
       }
     })
       
