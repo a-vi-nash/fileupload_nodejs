@@ -5,7 +5,11 @@ const express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
     httpServer = require("http").createServer(app),
-    path = require('path');
+    path = require('path'),
+    swaggerJSDoc = require('swagger-jsdoc')
+    //swaggerUi = require('swagger-ui-express'),
+    //swaggerDocument = require('./swagger.json')
+    ;
 
 
 /**
@@ -48,6 +52,32 @@ app.use(require('./fileupload/controllers/'));
 * load ui.
 **/
 app.use('/page', express.static(path.join(__dirname, 'ui')))
+
+
+/**
+* swagger ui.
+**/
+//app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// swagger definition
+const swaggerDefinition = {
+    info: {
+      title: 'Node Swagger API',
+      version: '1.0.1',
+      description: 'FileUpload RESTful API with Swagger',
+    },
+    host: 'localhost:3000',
+    basePath: '/',
+  };
+// options for the swagger docs
+const options = {
+    // import swaggerDefinitions
+    swaggerDefinition: swaggerDefinition,
+    // path to the API docs
+    apis: ['./routes/*.js'],
+  };
+  
+// initialize swagger-jsdoc
+var swaggerSpec = swaggerJSDoc(options);
 
 /**
 * Server start port.

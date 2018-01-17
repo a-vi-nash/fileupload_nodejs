@@ -1,0 +1,58 @@
+{
+	"info": {
+		"name": "FileUpload",
+		"_postman_id": "27c41aa3-eae2-00c9-21c6-d28fd86406b9",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "fileupload_multiple",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "file",
+							"value": "",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"url": "localhost:3000/fileupload/multiple",
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "fileupload_single",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"description": "",
+							"type": "file"
+						}
+					]
+				},
+				"url": "localhost:3000/fileupload",
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
