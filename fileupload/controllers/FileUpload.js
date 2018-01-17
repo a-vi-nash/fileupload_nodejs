@@ -1,18 +1,33 @@
 "use strict";
 const express = require("express"),
   router = express.Router(),
-  fileUpload = require("../helpers/fileUpload").SingleFileUpload;
+  fileUpload = require("../helpers/fileUpload").SingleFileUpload,
+  jsontocsv = require("../helpers/jsontocsv");
 
 //fileupload route
 router.post("/", fileUpload.single("file"), (req, res) => {
-  let actualfile = req.file;
+  if(req.fileValidationError)
+  {
+    return res
+        .status(400)
+        .json({
+          message:req.fileValidationError
+        })
+        .send();
+  }
+  else
+  {
+    let actualfile = req.file;
   
       return res
         .status(200)
         .json({
-          message:actualfile.originalname+" Uploaded"
+          message:actualfile.originalname+" Uploaded",
+          filename : actualfile.filename
         })
         .send();
+  }
+  
 });
 
 router.post("/multiple", fileUpload.array("file"), (req, res) => {
@@ -50,5 +65,42 @@ router.post("/multiple", fileUpload.array("file"), (req, res) => {
   throw error;
 });
 });
+
+router.post("/tocsv", fileUpload.single("file"), (req, res) => {
+  if(req.fileValidationError){
+    return res
+        .status(400)
+        .json({
+          message:req.fileValidationError
+        }).send();
+  }
+  else
+  {
+    const actualfile = req.file,
+        filename = actualfile.filename.slice(0,-5),
+        jsondata = JSON.parse(jsontocsv.readJson(filename));
+
+    jsontocsv.jsonToCsv(jsondata,filename,(err,msg)=>{
+      if(err)
+      {
+        return res
+        .status(400)
+        .json({
+          message:"Error while converting to CSV",
+          error:err
+        }).send();
+      }
+      else
+      {
+        return res
+        .status(200)
+        .sendFile(global.config.uploadFolder+"/"+filename+".csv");
+      }
+    })
+      
+  }
+  
+});
+
 
   module.exports = router;

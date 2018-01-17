@@ -12,8 +12,11 @@ let storage = multer.diskStorage({
   }
 });
 
-const svgpngFilter = (req, file, cb) => {
-  if (file.mimetype !== "image/svg+xml" && file.mimetype !== "image/png") {
+let memoryStorage = multer.memoryStorage;
+
+const jsonFilter = (req, file, cb) => {
+  if (file.mimetype !== "application/json") {
+    req.fileValidationError = global.config.fileValidationError;
     return cb(null, false);
   } else {
     cb(null, true);
@@ -21,7 +24,7 @@ const svgpngFilter = (req, file, cb) => {
 };
 
 exports.SingleFileUpload = multer({
-  fileFilter: svgpngFilter,
+  fileFilter: jsonFilter,
   storage,
   limits: {
     fileSize: 5 * 1024 * 1024 // no larger than 5mb
